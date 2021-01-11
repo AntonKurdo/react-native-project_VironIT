@@ -13,7 +13,7 @@ const LoginScreen: FC = () => {
   const [password, setPassword] = useState<string>('');
 
   const navigation = useNavigation();
-  const {state, showLoader, hideLoader} = useContext(Context);
+  const {state, showLoader, hideLoader, setActiveUser, setShops} = useContext(Context);
 
   const onLogin: () => Promise<void> = async () => {
     showLoader();
@@ -21,10 +21,14 @@ const LoginScreen: FC = () => {
       const data = JSON.parse(await getData());
       const candidate = data.find(user => user.login === email);    
         if(candidate && candidate.password === password) {  
-          setTimeout(() => {  
-            navigation.navigate('Main');       
+          setTimeout(async () => {  
+            setActiveUser(email);
+            const users = JSON.parse(await getData());
+            const {shops} = users.find(user => user.login === email);
+            navigation.navigate('Main');  
+            setShops(shops);                 
             hideLoader();                   
-          }, 1500)          
+          }, 1000)          
         } else {
           hideLoader();
           Alert.alert('Log In Error!!!', 'Check entered data...')

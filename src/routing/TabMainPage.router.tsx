@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {FC, useContext} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { THEME } from './../theme';
@@ -8,6 +8,8 @@ import { Context } from './../context/context';
 // SCREENS
 import SettingsScreen from './../screens/Settings.Screen';
 import MainScreen from '../screens/Main.screen';
+import CreateShopForm from './../screens/CreateShopForm.screen';
+
 
 
 
@@ -15,7 +17,7 @@ import MainScreen from '../screens/Main.screen';
 const Tab = createBottomTabNavigator();
 
 
-export function MainTabs() {
+export function MainTabs(){
   const {state} = useContext(Context)
 
   return (
@@ -34,6 +36,14 @@ export function MainTabs() {
           <MaterialCommunityIcons name="home" color={color} size={30} />
         )       
       }} />
+       <Tab.Screen 
+        name="Form" 
+        component={CreateShopForm}         
+        options={{                     
+          tabBarIcon: ({color}) => (        
+           <AntDesign name="form" size={30} color={color} />
+          )                  
+        }} />       
       <Tab.Screen 
         name="Settings" 
         component={SettingsScreen}         
@@ -42,6 +52,7 @@ export function MainTabs() {
            <AntDesign name="setting" size={30} color={color} />
           )                  
         }} />       
+     
     </Tab.Navigator>
   );
 };

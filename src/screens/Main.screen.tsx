@@ -8,7 +8,7 @@ import { MapModal } from '../components/MapModal/MapModal';
 
 const MainScreen: FC = () => {
 
-  const {state, setMapModal} = useContext(Context);
+  const {state, setMapModal, clearActiveUser, clearShops} = useContext(Context);
   const navigation = useNavigation();
 
   return (
@@ -20,7 +20,11 @@ const MainScreen: FC = () => {
         style={{marginBottom: 15}}
       >Map</AppButton>   
       <AppButton 
-        onPress={() => navigation.navigate('Home')}      
+        onPress={() => {
+          clearActiveUser();
+          clearShops();
+          navigation.navigate('Home');
+        }}      
         iconName='sign-out'  
       >Log Out</AppButton>   
     </View>

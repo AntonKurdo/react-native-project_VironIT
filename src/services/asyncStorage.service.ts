@@ -1,16 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
-import {validationSchema} from '../validation/validation.scheme';
+import {validationSchema} from '../validation/createNewUser.scheme';
 
 const clearStorage = async() => {
     await AsyncStorage.clear();
-}
+};
 // clearStorage();
 
 interface storeData {
     login : string,
     password : string
-}
+};
 
 
 
@@ -29,10 +29,12 @@ export const storeData = async({login, password} : storeData) : Promise <boolean
     try {
         const validate = await validationSchema.validate({email: login, password});
         if (!validate.error) {
-            await AsyncStorage.setItem('users', JSON.stringify([
+            const prev = await getData();
+            await AsyncStorage.setItem('users', JSON.stringify([...JSON.parse(prev),
                 {
                     login,
-                    password
+                    password,
+                    shops: []
                 }
             ]));         
             Alert.alert('Success', `User with login ${login} has been created...`);

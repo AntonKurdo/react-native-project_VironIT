@@ -1,11 +1,12 @@
 import React, {useReducer} from 'react';
 import {Context} from './context';
 import {reducer} from './reducer';
-import { CHANGE_THEME, SET_LOCATION, SET_MAP_MODAL, SHOW_LOADER, HIDE_LOADER } from './types';
+import { CHANGE_THEME, SET_LOCATION, SET_MAP_MODAL, SHOW_LOADER, HIDE_LOADER, SET_ACTIVE_USER, CLEAR_ACTIVE_USER, SET_SHOPS, CLEAR_SHOPS } from './types';
 
 export const AppState = ({children}) => {
 
     const INITIAL_STATE = {   
+        activeUser: '',
         isLightenMode: true,
         location: null,
         coords: {
@@ -13,7 +14,8 @@ export const AppState = ({children}) => {
             longitude: null
         },
         isMapVisible: false,
-        isLoader: false
+        isLoader: false,
+        shops: []
     };
 
     const [state,
@@ -24,6 +26,11 @@ export const AppState = ({children}) => {
     const setMapModal : any = () => dispatch({type: SET_MAP_MODAL});
     const showLoader : any = () => dispatch({type: SHOW_LOADER});
     const hideLoader : any = () => dispatch({type: HIDE_LOADER});
+    const setActiveUser : any = (userName) => dispatch({type: SET_ACTIVE_USER, userName});
+    const clearActiveUser : any = () => dispatch({type: CLEAR_ACTIVE_USER});
+    const setShops : any = (shops) => dispatch({type: SET_SHOPS, shops});
+    const clearShops : any = () => dispatch({type: CLEAR_SHOPS});
+
 
     return <Context.Provider
         value={{
@@ -33,6 +40,10 @@ export const AppState = ({children}) => {
         setLocation,
         setMapModal,
         showLoader,
-        hideLoader
+        hideLoader,
+        setActiveUser, 
+        clearActiveUser,
+        setShops,
+        clearShops
     }}>{children}</Context.Provider>
 };
