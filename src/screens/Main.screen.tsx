@@ -1,4 +1,4 @@
-import React, {FC, useContext} from 'react';
+import React, {FC, useEffect, useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
 import { AppButton } from '../components/AppButton';
 import { Context } from './../context/context';
@@ -8,8 +8,14 @@ import { MapModal } from '../components/MapModal/MapModal';
 
 const MainScreen: FC = () => {
 
-  const {state, setMapModal, clearActiveUser, clearShops} = useContext(Context);
+  const {state, setMapModal, clearActiveUser, clearShops, hideLoader} = useContext(Context);
   const navigation = useNavigation();
+
+  useEffect(() =>  {
+    setTimeout(() => {
+      hideLoader();
+    }, 200)
+  }, []);
 
   return (
     <View style={state.isLightenMode ? {...styles.container, ...styles.containerLight} :  {...styles.container, ...styles.containerDark}}> 

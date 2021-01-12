@@ -8,7 +8,6 @@ import SignUpScreen from '../screens/SignUp.screen';
 import LoginScreen from './../screens/Login.screen';
 import { MainTabs } from './TabMainPage.router';
 
-
 const Stack = createStackNavigator();
 
 const MainRouter : FC = () => {

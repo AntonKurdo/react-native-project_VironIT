@@ -25,9 +25,9 @@ const LoginScreen: FC = () => {
             setActiveUser(email);
             const users = JSON.parse(await getData());
             const {shops} = users.find(user => user.login === email);
-            navigation.navigate('Main');  
-            setShops(shops);                 
-            hideLoader();                   
+            navigation.navigate('Main'); 
+            setShops(shops);          
+            // hideLoader();          
           }, 1000)          
         } else {
           hideLoader();
@@ -41,7 +41,7 @@ const LoginScreen: FC = () => {
 
   if(state.isLoader) {
     return <AppLoader />
-  };
+  }
 
   return (
     <View style={state.isLightenMode ? {...styles.wrapper, ...styles.wrapperLight } : {...styles.wrapper, ...styles.wrapperDark }}>

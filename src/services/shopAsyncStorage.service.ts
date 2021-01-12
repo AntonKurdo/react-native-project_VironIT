@@ -2,32 +2,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { shopValidationSchema } from './../validation/createNewShop.scheme';
 import {Alert} from 'react-native';
 import { getData } from './asyncStorage.service';
+import { iNewShop } from './../screens/CreateShopForm.screen';
 
 
-export const getShops = async() : Promise <string> => {
+
+export const saveShops = async(newShopObj: iNewShop, activeUser: string) : Promise <boolean> => {
   try {
-      const data = await AsyncStorage.getItem('shops');   
-      return data
-          ? data
-          : '[]';
-  } catch (e) {
-      console.log(e.message);
-  }
-};
-
-
-export const saveShops = async(newShopObj, activeUser) : Promise <boolean> => {
-  try {
-      const validate = await shopValidationSchema.validate(newShopObj);
+      const validate = await shopValidationSchema.validate(newShopObj);      
       const users = JSON.parse(await getData());
       const currentUser =  users.find(user => user.login === activeUser);      
       if (!validate.error && currentUser) {
           const usersWithShops = users.map(user => {
             if(user.login === activeUser) {
               if(user.shops.length !== 0) {
-                user.shops = [...user.shops, newShopObj];
+                user.shops = [...user.shops, {...newShopObj, id: Date.now().toString()}];
               } else {
-                user.shops = [newShopObj];
+                user.shops = [{...newShopObj, id: Date.now().toString()}];
               }
             }
             return user;

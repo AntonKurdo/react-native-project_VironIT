@@ -1,6 +1,6 @@
 import React, {FC, useContext} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { THEME } from './../theme';
 
 import { Context } from './../context/context';
@@ -9,6 +9,7 @@ import { Context } from './../context/context';
 import SettingsScreen from './../screens/Settings.Screen';
 import MainScreen from '../screens/Main.screen';
 import CreateShopForm from './../screens/CreateShopForm.screen';
+import ShopsList from './../screens/ShopsList.screen';
 
 
 
@@ -43,7 +44,15 @@ export function MainTabs(){
           tabBarIcon: ({color}) => (        
            <AntDesign name="form" size={30} color={color} />
           )                  
-        }} />       
+        }} />    
+        <Tab.Screen 
+        name="ShopsList" 
+        component={ShopsList}         
+        options={{                     
+          tabBarIcon: ({color}) => (        
+           <FontAwesome name="list-alt" size={30} color={color} />
+          )                  
+        }} />    
       <Tab.Screen 
         name="Settings" 
         component={SettingsScreen}         
@@ -51,8 +60,7 @@ export function MainTabs(){
           tabBarIcon: ({color}) => (        
            <AntDesign name="setting" size={30} color={color} />
           )                  
-        }} />       
-     
+        }} />   
     </Tab.Navigator>
   );
 };

@@ -8,12 +8,15 @@ import { saveShops } from '../services/shopAsyncStorage.service';
 import { useNavigation } from '@react-navigation/native';
 import { getData } from './../services/asyncStorage.service';
 
-interface iNewShop {
+export interface iNewShop {
+  id?: string,
   name: string,
   shopType: string,
   latitude: string,
-  longitude: string
-}
+  longitude: string,
+  isFavourite: boolean
+};
+
 const CreateShopForm: FC = () => {
   const {state, setShops} = useContext(Context);
   const navigation = useNavigation();
@@ -24,7 +27,7 @@ const CreateShopForm: FC = () => {
 
   const addNewShop = async () => {
     const newShop: iNewShop = {
-      name, shopType: shopType.toString(), latitude, longitude
+      name, shopType: shopType.toString(), latitude, longitude, isFavourite: false
     };
 
    if(await saveShops(newShop, state.activeUser)) {

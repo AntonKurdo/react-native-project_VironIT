@@ -11,7 +11,7 @@ import { selectIcon } from './../../services/mapIconsSelect.service';
 export const MapModal = () => {
 
     const { state, coords, setMapModal } = useContext(Context); 
-     
+    
     return (
         <Modal
             animationType="slide"

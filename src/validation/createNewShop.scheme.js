@@ -5,4 +5,5 @@ export const shopValidationSchema = Joi.object().keys({
   shopType: Joi.string().required(),
   latitude: Joi.string().required(),
   longitude: Joi.string().required(),
+  isFavourite: Joi.bool().required()
 });
