@@ -1,6 +1,6 @@
 import React, {FC, useContext} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
-import { iNewShop } from '../screens/CreateShopForm.screen';
+import {StyleSheet, View, TouchableOpacity, Text, Alert} from 'react-native';
+// import { iNewShop } from '../screens/CreateShopForm.screen';
 import { THEME } from './../theme';
 import { AntDesign } from '@expo/vector-icons';
 import { Context } from './../context/context';
@@ -32,21 +32,51 @@ export const ShopsListItem: FC<ShopsListItemProps> = ({item}) => {
     } catch(e) {
       console.log(e)
     }
-
   };
 
+  const removeShop = async (id: string, name: string): Promise<any> => {
+    Alert.alert(
+      "Removing shop...",
+      `Are sure to remove ${name}?`,
+      [
+        {
+          text: "Cancel",          
+          style: "cancel"
+        },
+        { text: "OK", onPress: async () => {
+          try{
+            const data = JSON.parse(await getData());
+            const user = data.find(user => user.login === state.activeUser);
+            const newShops = user.shops.filter(shop => shop.id !== id);
+            setShops(newShops);
+            user.shops = newShops;    
+            await AsyncStorage.setItem('users', JSON.stringify(data));           
+          } catch(e) {
+            console.log(e)
+          }
+        }}
+      ],
+      { cancelable: false }
+    );   
+  };
+
+
+
   return (
-    <TouchableOpacity  style={state.isLightenMode ? {...styles.container, ...styles.containerLight} :  {...styles.container, ...styles.containerDark}} onPress={likeShop.bind(null, item.id)}>    
-      <Text style={state.isLightenMode ? {...styles.text, ...styles.textLight} : {...styles.text, ...styles.textDark}}>{item.name}</Text>
-      <Text style={styles.subtext}>Lat {item.latitude}</Text>
-      <Text style={styles.subtext}>Long {item.longitude}</Text>
-      {
-        item.isFavourite && 
-        <View style={styles.btnLike}>
-          <AntDesign name="like1" size={28} color={state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.MAIN_COLOR_DARK} />
-        </View>
-      }
-      
+    <TouchableOpacity  
+      style={state.isLightenMode ? {...styles.container, ...styles.containerLight} :  {...styles.container, ...styles.containerDark}} 
+      onPress={likeShop.bind(null, item.id)}
+      onLongPress={removeShop.bind(null, item.id, item.name)}
+    >    
+        <Text style={state.isLightenMode ? {...styles.text, ...styles.textLight} : {...styles.text, ...styles.textDark}}>{item.name}</Text>
+        <Text style={styles.subtext}>Lat {item.latitude}</Text>
+        <Text style={styles.subtext}>Long {item.longitude}</Text>
+        {
+          item.isFavourite && 
+          <View style={styles.btnLike}>
+            <AntDesign name="like1" size={28} color={state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.MAIN_COLOR_DARK} />
+          </View>
+        }        
     </TouchableOpacity>
   )
 };

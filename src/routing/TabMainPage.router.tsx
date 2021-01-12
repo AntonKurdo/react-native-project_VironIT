@@ -1,4 +1,4 @@
-import React, {FC, useContext} from 'react';
+import React, {useContext} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { THEME } from './../theme';
@@ -36,7 +36,8 @@ export function MainTabs(){
         tabBarIcon: ({color}) => (
           <MaterialCommunityIcons name="home" color={color} size={30} />
         )       
-      }} />
+       }}       
+      />
        <Tab.Screen 
         name="Form" 
         component={CreateShopForm}         
