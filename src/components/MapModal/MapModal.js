@@ -9,10 +9,11 @@ import { THEME } from '../../theme';
 import { nightStyles } from './MapStyles_Night';
 import { selectIcon } from './../../services/mapIconsSelect.service';
 import { getData } from './../../services/asyncStorage.service';
+import {StatusBar} from 'react-native';
 
 
-export const MapModal = () => {
 
+export const MapModal = () => {    
     const { state, coords, setMapModal, setShops } = useContext(Context); 
 
     const [localShops, setLocalShops] = useState(state.shops);
@@ -115,14 +116,24 @@ export const MapModal = () => {
                 </MapView>
             </View>
            
-            <AppButton 
+            {/* <AppButton 
                 style={{position: 'absolute', top: 20, right: 20, backgroundColor: 'white'}} 
                 iconName='close'
                 onPress={() => {
                     setMapModal();
                     setIsPopupShow(false);
                 }}
-            > Close </AppButton>
+            > Close </AppButton> */}
+
+            <TouchableOpacity
+                style={styles.btnBack}
+                 onPress={() => {
+                    setMapModal();
+                    setIsPopupShow(false);
+                }}
+            >   
+                <AntDesign name="arrowleft" size={40} color={state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.SECOND_COLOR_DARK} />
+            </TouchableOpacity>
            
              <TouchableOpacity style={styles.btnLiked} onPress={filterFavouriteShops}>
                 {
@@ -183,8 +194,8 @@ const styles = StyleSheet.create({
     },
     btnLiked: {       
         position: 'absolute',
-        top: 25, 
-        left: 20
+        top: StatusBar.currentHeight + 10, 
+        right: 20
     },
     inputCont: {
         padding: 8,
@@ -246,4 +257,9 @@ const styles = StyleSheet.create({
         top: 15,
         left: 15
     },
+    btnBack: {
+        position: 'absolute',
+        top:  StatusBar.currentHeight + 10,
+        left: 20
+    }
 });
