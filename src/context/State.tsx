@@ -29,8 +29,7 @@ export const AppState = ({children}) => {
     const setActiveUser : any = (userName) => dispatch({type: SET_ACTIVE_USER, userName});
     const clearActiveUser : any = () => dispatch({type: CLEAR_ACTIVE_USER});
     const setShops : any = (shops) => dispatch({type: SET_SHOPS, shops});
-    const clearShops : any = () => dispatch({type: CLEAR_SHOPS});
-
+    const clearShops : any = () => dispatch({type: CLEAR_SHOPS}); 
 
     return <Context.Provider
         value={{
@@ -44,6 +43,6 @@ export const AppState = ({children}) => {
         setActiveUser, 
         clearActiveUser,
         setShops,
-        clearShops
+        clearShops       
     }}>{children}</Context.Provider>
 };

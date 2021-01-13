@@ -28,7 +28,7 @@ const handlers = {
   [SET_ACTIVE_USER]: (state, {userName}) => ({...state, activeUser: userName}),
   [CLEAR_ACTIVE_USER]: (state) => ({...state, activeUser: ''}),
   [SET_SHOPS]: (state, {shops}) => ({...state, shops}),
-  [CLEAR_SHOPS]: (state) => ({...state, shops: []})
+  [CLEAR_SHOPS]: state => ({...state, shops: []})
 };
 
 

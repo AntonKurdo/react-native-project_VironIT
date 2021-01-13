@@ -1,4 +1,4 @@
-export const selectIcon = function(shopType): string {
+export const selectIcon = (shopType): string => {
   switch(shopType) {
     case 'sport': 
      return require('../../assets/mapIcons/sport.png');

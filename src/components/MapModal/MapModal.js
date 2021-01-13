@@ -1,35 +1,83 @@
 import React, { useState, useContext, useEffect } from 'react';
-import {StyleSheet, View, Modal, TouchableOpacity } from 'react-native';
+import {StyleSheet, View, Modal, Text, Image,  TouchableOpacity, TextInput } from 'react-native';
 import MapView from 'react-native-maps';
 import { AntDesign } from '@expo/vector-icons'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Context } from '../../context/context';
 import { AppButton } from '../AppButton';
 import { THEME } from '../../theme';
 import { nightStyles } from './MapStyles_Night';
 import { selectIcon } from './../../services/mapIconsSelect.service';
+import { getData } from './../../services/asyncStorage.service';
+
 
 export const MapModal = () => {
 
-    const { state, coords, setMapModal } = useContext(Context); 
+    const { state, coords, setMapModal, setShops } = useContext(Context); 
 
-    const [shops, setShops] = useState(state.shops);
+    const [localShops, setLocalShops] = useState(state.shops);
     const [favouriteMode, setFavouriteMode] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [isPopupShow, setIsPopupShow] = useState(false)
+    const [popupInfo, setPopupInfo] = useState({name: '', latitude: '', longitude: '', isFavourite: false, id: ''});
+
+    
+
+   const pushPopupInfo = (name, lat, long, isF, id) => {         
+        setIsPopupShow(true);
+        setPopupInfo({
+            name,
+            latitude: lat,
+            longitude: long,
+            isFavourite: isF,
+            id    
+        });        
+   }  
 
     useEffect(() => {
-        setShops(state.shops)
+        setLocalShops(state.shops)
     }, [state.shops]);
     
     const filterFavouriteShops = () => {
         if(!favouriteMode) {
             const favouriteShops = state.shops.filter(shop => shop.isFavourite === true);      
-            setShops(favouriteShops);
+            setLocalShops(favouriteShops);
             setFavouriteMode(true);
         } else {
-            setShops(state.shops);
+            setLocalShops(state.shops);
             setFavouriteMode(false);
+        }       
+        setInputValue('');
+        setIsPopupShow(false);
+    };
+
+    const likeShop = async (id) => {       
+        try {
+            const data = JSON.parse(await getData());
+            const user = data.find(user => user.login === state.activeUser);
+            const newShops = user.shops.map(shop => {
+            if(shop.id === id) {
+                shop.isFavourite = !shop.isFavourite
+            }
+            return shop;
+            });
+            setShops(newShops);          
+            setPopupInfo({...popupInfo, isFavourite: !popupInfo.isFavourite})
+            await AsyncStorage.setItem('users', JSON.stringify(data));     
+        } catch(e) {
+            console.log(e)
         }
-       
-    }
+    };
+
+    const filterByShopName = (text) => {
+        if(text && favouriteMode) {
+            setLocalShops(localShops.filter(shop => shop.name.toLowerCase().includes(text.toLowerCase())));
+        } else if(text && !favouriteMode) {
+            setLocalShops(state.shops.filter(shop => shop.name.toLowerCase().includes(text.toLowerCase())));
+        }else {
+            setLocalShops(state.shops)
+        }
+    };
 
     return (
         <Modal
@@ -41,19 +89,21 @@ export const MapModal = () => {
                 <MapView
                     customMapStyle={state.isLightenMode ? [] : nightStyles}
                     style={styles.map}
-                    region={{
-                   ...coords,
+                    initialRegion={{
+                        ...coords,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421
-                }}>
-                    <MapView.Marker
+                    }}               
+                >
+                    <MapView.Marker                        
                         coordinate={coords}
                         title='Now You are here!'                                              
-                    />
+                    />                   
                     {
-                     shops.map((shop, index) => {
+                     localShops.map((shop, index) => {
                         return (
                           <MapView.Marker
+                            onPress={() => pushPopupInfo(shop.name, shop.longitude, shop.latitude, shop.isFavourite, shop.id)}
                             icon={selectIcon(shop.shopType)}
                             key={index}
                             title={shop.name}
@@ -61,16 +111,18 @@ export const MapModal = () => {
                           />
                         )
                       })
-                    }
+                    }                    
                 </MapView>
             </View>
            
             <AppButton 
                 style={{position: 'absolute', top: 20, right: 20, backgroundColor: 'white'}} 
                 iconName='close'
-                onPress={setMapModal}
+                onPress={() => {
+                    setMapModal();
+                    setIsPopupShow(false);
+                }}
             > Close </AppButton>
-
            
              <TouchableOpacity style={styles.btnLiked} onPress={filterFavouriteShops}>
                 {
@@ -79,7 +131,41 @@ export const MapModal = () => {
                         : <AntDesign name="hearto" size={40} color={state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.SECOND_COLOR_DARK} />
                 }
             </TouchableOpacity>
-        
+
+            <View style={state.isLightenMode ? {...styles.inputCont, ...styles.inputContLight} : {...styles.inputCont, ...styles.inputContDark}}>              
+                <TextInput 
+                    selectionColor={state.isLightenMode ? 'black' : 'white'}
+                    placeholderTextColor={state.isLightenMode ? 'black' : 'white'}
+                    placeholder='Begin to enter name of shop...'
+                    style={state.isLightenMode ? {...styles.input, ...styles.inputLight} : {...styles.input, ...styles.inputDark}}
+                    value={inputValue}
+                    onChangeText={text => {
+                        setInputValue(text);
+                        filterByShopName(text);
+                    }}
+                />
+            </View>    
+            {
+                isPopupShow && 
+                <View style={styles.popup}>              
+                    <Image 
+                        style={styles.img}                   
+                        source={require(`../../../assets/shop.png`)}
+                    />                
+                    <Text style={styles.popupText}>{popupInfo.name}</Text>
+                    <Text style={styles.popupText}>lat: {popupInfo.latitude}, lon: {popupInfo.longitude} </Text>
+                    <TouchableOpacity style={styles.btnClose} onPress={() => setIsPopupShow(false)}>
+                        <AntDesign name="close" size={24} color="white" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnLike} onPress={likeShop.bind(null, popupInfo.id)}>
+                        {
+                            popupInfo.isFavourite 
+                                ? <AntDesign name="heart" size={24} color="white" />
+                                : <AntDesign name="hearto" size={24} color="white" />
+                        }
+                    </TouchableOpacity>                
+                </View>   
+            }                    
         </Modal>
     )
 };
@@ -99,5 +185,65 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 25, 
         left: 20
-    }
+    },
+    inputCont: {
+        padding: 8,
+        position: 'absolute',
+        bottom: 30,
+        alignSelf: 'center',
+        flexDirection: 'row',          
+        borderRadius: 5
+    },
+    inputContLight: {
+        backgroundColor: 'rgba(0,0,0,0.15)'     
+    },
+    inputContDark: {
+        backgroundColor: 'rgba(255,255,255,0.2)'       
+    },
+    input: {
+        width: THEME.WIDTH * 0.8,
+        borderBottomWidth: 2,
+        padding: 5,
+        fontSize: 20       
+    },
+    inputLight: {
+        color: THEME.MAIN_COLOR_DARK,
+        borderBottomColor: 'black'
+    },
+    inputDark: {
+        color: THEME.SECOND_COLOR_DARK,
+        borderBottomColor: 'white' 
+    },    
+    popup: {
+        position: 'absolute',
+        bottom: 50,
+        alignSelf: 'center',
+        width: THEME.WIDTH * 0.9,
+        height: 200,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        marginBottom: 50,
+        borderRadius: 10,
+        paddingVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'center'  
+    },
+    img: {
+        width: THEME.WIDTH * 0.45,
+        height: 130,
+        resizeMode: 'contain'
+    },
+    popupText: {
+        color: 'white',
+        fontWeight: 'bold'
+    },
+    btnClose: {
+        position: 'absolute',
+        top: 15,
+        right: 15
+    },
+    btnLike: {
+        position: 'absolute',
+        top: 15,
+        left: 15
+    },
 });
