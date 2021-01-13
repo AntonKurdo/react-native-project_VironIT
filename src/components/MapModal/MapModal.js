@@ -11,8 +11,6 @@ import { selectIcon } from './../../services/mapIconsSelect.service';
 import { getData } from './../../services/asyncStorage.service';
 import {StatusBar} from 'react-native';
 
-
-
 export const MapModal = () => {    
     const { state, coords, setMapModal, setShops } = useContext(Context); 
 
@@ -20,9 +18,7 @@ export const MapModal = () => {
     const [favouriteMode, setFavouriteMode] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [isPopupShow, setIsPopupShow] = useState(false)
-    const [popupInfo, setPopupInfo] = useState({name: '', latitude: '', longitude: '', isFavourite: false, id: ''});
-
-    
+    const [popupInfo, setPopupInfo] = useState({name: '', latitude: '', longitude: '', isFavourite: false, id: ''});    
 
    const pushPopupInfo = (name, lat, long, isF, id) => {         
         setIsPopupShow(true);
@@ -115,16 +111,6 @@ export const MapModal = () => {
                     }                    
                 </MapView>
             </View>
-           
-            {/* <AppButton 
-                style={{position: 'absolute', top: 20, right: 20, backgroundColor: 'white'}} 
-                iconName='close'
-                onPress={() => {
-                    setMapModal();
-                    setIsPopupShow(false);
-                }}
-            > Close </AppButton> */}
-
             <TouchableOpacity
                 style={styles.btnBack}
                  onPress={() => {
