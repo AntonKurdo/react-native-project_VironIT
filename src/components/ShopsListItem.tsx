@@ -71,12 +71,13 @@ export const ShopsListItem: FC<ShopsListItemProps> = ({item}) => {
         <Text style={state.isLightenMode ? {...styles.text, ...styles.textLight} : {...styles.text, ...styles.textDark}}>{item.name}</Text>
         <Text style={styles.subtext}>Lat {item.latitude}</Text>
         <Text style={styles.subtext}>Long {item.longitude}</Text>
-        {
-          item.isFavourite && 
-          <View style={styles.btnLike}>
-            <AntDesign name="like1" size={28} color={state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.MAIN_COLOR_DARK} />
-          </View>
-        }        
+        <View style={styles.btnLike}> 
+          {
+            item.isFavourite 
+              ?  <AntDesign name="heart" size={28} color={state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.MAIN_COLOR_DARK} />
+              :  <AntDesign name="hearto" size={28} color={state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.MAIN_COLOR_DARK} />
+          }
+        </View>
     </TouchableOpacity>
   )
 };
