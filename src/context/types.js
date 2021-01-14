@@ -7,4 +7,4 @@ export const SET_ACTIVE_USER = 'SET_ACTIVE_USER';
 export const CLEAR_ACTIVE_USER = 'CLEAR_ACTIVE_USER';
 export const SET_SHOPS = 'SET_SHOPS';
 export const CLEAR_SHOPS = 'CLEAR_SHOPS';
-
+export const SET_RADIUS = 'SET_RADIUS';

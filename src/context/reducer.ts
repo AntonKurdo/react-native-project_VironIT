@@ -1,4 +1,4 @@
-import { CHANGE_THEME, SET_LOCATION, SET_MAP_MODAL, SHOW_LOADER, HIDE_LOADER, SET_ACTIVE_USER, CLEAR_ACTIVE_USER, SET_SHOPS, CLEAR_SHOPS } from './types';
+import { CHANGE_THEME, SET_LOCATION, SET_MAP_MODAL, SHOW_LOADER, HIDE_LOADER, SET_ACTIVE_USER, CLEAR_ACTIVE_USER, SET_SHOPS, CLEAR_SHOPS, SET_RADIUS } from './types';
 
 interface iCoords {
   latitude: number | null, 
@@ -10,7 +10,8 @@ interface iAction {
   location?: string,
   coords?: iCoords,
   userName?: string,
-  shops?: object[]
+  shops?: object[],
+  radius?: number
 };
 
 interface iState {  
@@ -28,7 +29,8 @@ const handlers = {
   [SET_ACTIVE_USER]: (state, {userName}) => ({...state, activeUser: userName}),
   [CLEAR_ACTIVE_USER]: (state) => ({...state, activeUser: ''}),
   [SET_SHOPS]: (state, {shops}) => ({...state, shops}),
-  [CLEAR_SHOPS]: state => ({...state, shops: []})
+  [CLEAR_SHOPS]: state => ({...state, shops: []}),
+  [SET_RADIUS]: (state, {radius}) => ({...state, radius})
 };
 
 

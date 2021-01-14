@@ -1,12 +1,11 @@
-import React, {FC, useContext} from 'react';
-import {StyleSheet, View, Text, Switch} from 'react-native';
+import React, {FC, useContext, useState} from 'react';
+import {StyleSheet, View, Text, Switch, TextInput} from 'react-native';
 import { THEME } from './../theme';
 import { Context } from './../context/context';
 
 const SettingsScreen: FC = () => {
 
-  const {state, changeTheme} = useContext(Context);  
-
+  const {state, changeTheme, setRadius} = useContext(Context);  
   return (
     <View style={state.isLightenMode ?  styles.containerLight : styles.containerDark}> 
       <Text style={styles.text}>Theme mode</Text>   
@@ -22,6 +21,19 @@ const SettingsScreen: FC = () => {
       />
       <Text style={{fontSize: 12}}>Now You are in:</Text>
       <Text style={state.isLightenMode ? {...styles.location, ...styles.locationLight} : {...styles.location, ...styles.locationDark}}>{state.location}</Text>
+      <View style={styles.radiusCont}>
+        <Text style={styles.radiusText}>Set radius</Text>
+        <TextInput
+          selectionColor={state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.MAIN_COLOR_DARK}
+          placeholder='Set radius'        
+          keyboardType='numeric'
+          value={state.radius.toString()}
+          style={state.isLightenMode ? {...styles.radius, ...styles.radiusLight} : {...styles.radius, ...styles.radiusDark}} 
+          onChangeText={setRadius}
+          maxLength={4}
+        />
+        <Text style={styles.radiusText}>M</Text>
+      </View>
     </View>
   )
 };
@@ -61,6 +73,35 @@ const styles = StyleSheet.create({
   },
   locationDark:  {
     color: THEME.MAIN_COLOR_DARK
+  },
+  radius: {
+    borderWidth: 2,
+    padding: 5,
+    width: THEME.WIDTH * 0.3,
+    fontSize: 21,
+    borderRadius: 10,
+    textAlign: 'center',
+    marginLeft: 10,
+    marginRight: 5
+  },
+  radiusLight: {
+    color: THEME.MAIN_COLOR_LIGHT,
+    borderColor: THEME.MAIN_COLOR_LIGHT
+  },
+  radiusDark: {
+    color: THEME.MAIN_COLOR_DARK,
+    borderColor: THEME.MAIN_COLOR_DARK
+  },
+  radiusCont: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  radiusText: {
+    fontSize: 20,
+    color: 'gray'
   }
 })
 
