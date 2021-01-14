@@ -4,40 +4,66 @@ import MapView from 'react-native-maps';
 import { AntDesign } from '@expo/vector-icons'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Context } from '../../context/context';
-import { AppButton } from '../AppButton';
 import { THEME } from '../../theme';
 import { nightStyles } from './MapStyles_Night';
 import { selectIcon } from './../../services/mapIconsSelect.service';
 import { getData } from './../../services/asyncStorage.service';
 import {StatusBar} from 'react-native';
 
+import Geofence from 'react-native-expo-geofence';
+
 export const MapModal = () => {    
+    
     const { state, coords, setMapModal, setShops } = useContext(Context); 
 
     const [localShops, setLocalShops] = useState(state.shops);
     const [favouriteMode, setFavouriteMode] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [isPopupShow, setIsPopupShow] = useState(false)
-    const [popupInfo, setPopupInfo] = useState({name: '', latitude: '', longitude: '', isFavourite: false, id: ''});    
+    const [popupInfo, setPopupInfo] = useState({name: '', latitude: '', longitude: '', isFavourite: false, id: '', isClosest: false, distance: null});     
 
-   const pushPopupInfo = (name, lat, long, isF, id) => {         
+    useEffect(() => {
+        setLocalShops(state.shops)
+    }, [state.shops]);
+
+    useEffect(() => {
+     if(state.radius && state.isMapVisible) {
+        const points = state.shops.filter(shop => shop.isFavourite).map(shop => {
+            return {                 
+                title: shop.name,
+                key: shop.id,
+                latitude: parseFloat(shop.latitude),
+                longitude: parseFloat(shop.longitude)                 
+            }
+        });        
+        const result =  Geofence.filterByProximity(coords, points, state.radius ? parseInt(state.radius) / 1000 : 0 );         
+        result.sort((a, b) => a.distanceInKM - b.distanceInKM);           
+         if(result.length) {
+            const nearestShop =  state.shops.find(shop => shop.name === result[0].title);                    
+            if(nearestShop) {
+                pushPopupInfo(nearestShop.name, nearestShop.latitude, nearestShop.longitude, nearestShop.isFavourite, nearestShop.id, true, result[0].distanceInKM)
+                setIsPopupShow(true);            
+            }            
+        }
+     }
+    }, [state.isMapVisible]);  
+
+   const pushPopupInfo = (name, lat, long, isF, id, isClosest, distance) => {         
         setIsPopupShow(true);
         setPopupInfo({
             name,
             latitude: lat,
             longitude: long,
             isFavourite: isF,
-            id    
+            id,
+            isClosest,
+            distance
         });        
-   }  
+   };
 
-    useEffect(() => {
-        setLocalShops(state.shops)
-    }, [state.shops]);
-    
     const filterFavouriteShops = () => {
         if(!favouriteMode) {
-            const favouriteShops = state.shops.filter(shop => shop.isFavourite === true);      
+            const favouriteShops = state.shops.filter(shop => shop.isFavourite);      
             setLocalShops(favouriteShops);
             setFavouriteMode(true);
         } else {
@@ -58,7 +84,7 @@ export const MapModal = () => {
             }
             return shop;
             });
-            setShops(newShops);          
+            setShops(newShops);              
             setPopupInfo({...popupInfo, isFavourite: !popupInfo.isFavourite})
             await AsyncStorage.setItem('users', JSON.stringify(data));     
         } catch(e) {
@@ -95,12 +121,26 @@ export const MapModal = () => {
                     <MapView.Marker                        
                         coordinate={coords}
                         title='Now You are here!'                                              
-                    />                   
+                    />  
+
+                  {
+                      state.radius > 0 && (
+                        <MapView.Circle                            
+                            center = {coords }
+                            radius = { state.radius ? parseInt(state.radius) : 0 }
+                            strokeWidth = { 1 }
+                            strokeColor = { state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.SECOND_COLOR_DARK }
+                            fillColor = { 'rgba(230,238,255,0.5)' }
+                            onRegionChangeComplete = { () =>  console.log('hohoho') }
+                    />
+                      )
+                  }
+
                     {
                      localShops.map((shop, index) => {
                         return (
                           <MapView.Marker
-                            onPress={() => pushPopupInfo(shop.name, shop.longitude, shop.latitude, shop.isFavourite, shop.id)}
+                            onPress={() => pushPopupInfo(shop.name, shop.latitude, shop.longitude, shop.isFavourite, shop.id, false, null)}
                             icon={selectIcon(shop.shopType)}
                             key={index}
                             title={shop.name}
@@ -144,7 +184,9 @@ export const MapModal = () => {
             </View>    
             {
                 isPopupShow && 
-                <View style={styles.popup}>              
+                <View style={styles.popup}>       
+                { popupInfo.isClosest && <Text style={styles.popupText}>Closest shop to You is:</Text>  }    
+                {popupInfo.distance && <Text style={{...styles.popupText, fontSize: 22,position: 'absolute', left: 10}}> {popupInfo.distance.toFixed(2)} km </Text> }
                     <Image 
                         style={styles.img}                   
                         source={require(`../../../assets/shop.png`)}

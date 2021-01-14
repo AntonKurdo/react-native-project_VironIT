@@ -1,7 +1,7 @@
 import React, {useReducer} from 'react';
 import {Context} from './context';
 import {reducer} from './reducer';
-import { CHANGE_THEME, SET_LOCATION, SET_MAP_MODAL, SHOW_LOADER, HIDE_LOADER, SET_ACTIVE_USER, CLEAR_ACTIVE_USER, SET_SHOPS, CLEAR_SHOPS } from './types';
+import { CHANGE_THEME, SET_LOCATION, SET_MAP_MODAL, SHOW_LOADER, HIDE_LOADER, SET_ACTIVE_USER, CLEAR_ACTIVE_USER, SET_SHOPS, CLEAR_SHOPS, SET_RADIUS } from './types';
 
 export const AppState = ({children}) => {
 
@@ -15,11 +15,11 @@ export const AppState = ({children}) => {
         },
         isMapVisible: false,
         isLoader: false,
-        shops: []
+        shops: [],       
+        radius: '0'
     };
 
-    const [state,
-        dispatch] = useReducer(reducer, INITIAL_STATE);
+    const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
  
     const changeTheme : any = () => dispatch({type: CHANGE_THEME})
     const setLocation : any = (location, coords) => dispatch({type: SET_LOCATION, location, coords});
@@ -30,6 +30,8 @@ export const AppState = ({children}) => {
     const clearActiveUser : any = () => dispatch({type: CLEAR_ACTIVE_USER});
     const setShops : any = (shops) => dispatch({type: SET_SHOPS, shops});
     const clearShops : any = () => dispatch({type: CLEAR_SHOPS}); 
+    const setRadius : any = (radius) => dispatch({type: SET_RADIUS, radius}); 
+ 
 
     return <Context.Provider
         value={{
@@ -43,6 +45,7 @@ export const AppState = ({children}) => {
         setActiveUser, 
         clearActiveUser,
         setShops,
-        clearShops       
+        clearShops,
+        setRadius       
     }}>{children}</Context.Provider>
 };

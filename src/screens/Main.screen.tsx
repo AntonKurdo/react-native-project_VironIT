@@ -28,7 +28,7 @@ const MainScreen: FC = () => {
       <AppButton 
         onPress={() => {
           clearActiveUser();
-          clearShops();
+          clearShops();         
           navigation.navigate('Home');
         }}      
         iconName='sign-out'  

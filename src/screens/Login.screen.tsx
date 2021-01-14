@@ -24,10 +24,9 @@ const LoginScreen: FC = () => {
           setTimeout(async () => {  
             setActiveUser(email);
             const users = JSON.parse(await getData());
-            const {shops} = users.find(user => user.login === email);
+            const {shops} = users.find(user => user.login === email);            
             navigation.navigate('Main'); 
-            setShops(shops);          
-            // hideLoader();          
+            setShops(shops);              
           }, 1000)          
         } else {
           hideLoader();
@@ -37,7 +36,6 @@ const LoginScreen: FC = () => {
       console.log(e);
     } 
   }; 
-
 
   if(state.isLoader) {
     return <AppLoader />
