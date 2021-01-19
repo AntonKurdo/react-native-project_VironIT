@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import {StyleSheet, View, Modal, Text, Image,  TouchableOpacity, TextInput } from 'react-native';
 import MapView from 'react-native-maps';
 import { AntDesign } from '@expo/vector-icons'; 
@@ -11,6 +11,9 @@ import { getData } from './../../services/asyncStorage.service';
 import {StatusBar} from 'react-native';
 
 import Geofence from 'react-native-expo-geofence';
+// import * as Permissions from 'expo-permissions';
+
+import * as Location from 'expo-location';
 
 export const MapModal = () => {    
     
@@ -21,6 +24,41 @@ export const MapModal = () => {
     const [inputValue, setInputValue] = useState('');
     const [isPopupShow, setIsPopupShow] = useState(false)
     const [popupInfo, setPopupInfo] = useState({name: '', latitude: '', longitude: '', isFavourite: false, id: '', isClosest: false, distance: null});     
+
+//   const getPoints = async () => {
+//     try {
+//         const { status } = await Permissions.getAsync(
+//             Permissions.LOCATION        
+//         );     
+//         if(status === 'granted') {
+//             const points = state.shops.filter(shop => shop.isFavourite).map(shop => {
+//                 return {                 
+//                     identifier: shop.id,                   
+//                     latitude: parseFloat(shop.latitude),
+//                     longitude: parseFloat(shop.longitude),
+//                     radius: 2500,
+//                     notifyOnEnter: true                
+//                 }
+//             });    
+//             if(points.length !== 0) {
+//                await Location.startGeofencingAsync("GEO_FENCING", points);                
+//             } else {
+//                 console.log('You have no favourite shops in the area');
+//             }                   
+//         }
+        
+//     } catch(e) {
+//         console.log(e)
+//     }   
+//   }
+  
+//   const getPoints1 = useCallback(async () => await getPoints(), [getPoints]);
+
+//   useEffect(() => {
+//       if(state.isMapVisible) {
+//         getPoints1()
+//       }    
+//   }, [state.isMapVisible])
 
     useEffect(() => {
         setLocalShops(state.shops)
@@ -35,7 +73,8 @@ export const MapModal = () => {
                 latitude: parseFloat(shop.latitude),
                 longitude: parseFloat(shop.longitude)                 
             }
-        });        
+        });    
+            
         const result =  Geofence.filterByProximity(coords, points, state.radius ? parseInt(state.radius) / 1000 : 0 );         
         result.sort((a, b) => a.distanceInKM - b.distanceInKM);           
          if(result.length) {

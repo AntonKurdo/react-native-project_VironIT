@@ -4,7 +4,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import { THEME } from './../theme';
 import { Context } from './../context/context';
 
-
 interface StylesType {
   [key: string]: string | number
 };
