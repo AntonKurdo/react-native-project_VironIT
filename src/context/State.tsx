@@ -35,17 +35,17 @@ export const AppState = ({children}) => {
 
     return <Context.Provider
         value={{
-        state,
-        coords: state.coords,     
-        changeTheme,
-        setLocation,
-        setMapModal,
-        showLoader,
-        hideLoader,
-        setActiveUser, 
-        clearActiveUser,
-        setShops,
-        clearShops,
-        setRadius       
+            state,
+            coords: state.coords,     
+            changeTheme,
+            setLocation,
+            setMapModal,
+            showLoader,
+            hideLoader,
+            setActiveUser, 
+            clearActiveUser,
+            setShops,
+            clearShops,
+            setRadius       
     }}>{children}</Context.Provider>
 };

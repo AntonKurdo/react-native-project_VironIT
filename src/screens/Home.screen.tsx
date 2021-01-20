@@ -7,6 +7,7 @@ import { useAppContext } from './../context/context';
 import { locale } from './../services/location.service';
 import { getLocationName } from './../services/getLocationName.service';
 import { AppButton } from '../components/AppButton';
+import { askForNotificationPermission } from '../services/notifications.service';
 
 const imageLight = require('../../assets/login-bg.png');
 const imageBlack = require('../../assets/black-bg.png');
@@ -17,11 +18,12 @@ const HomeScreen : FC = () => {
   const {state, setLocation} = useAppContext();
 
   const getLocation = useCallback(async () => {
-    const data = await locale();
+    const data = await locale();    
     const coords = {latitude: data.coords.latitude, longitude: data.coords.longitude};
     const locationName = await getLocationName(coords);
     setLocation(locationName, coords);
-  }, [locale]);
+    await askForNotificationPermission();
+  }, [locale, askForNotificationPermission]);
 
   useEffect( () => {
     getLocation();

@@ -2,10 +2,12 @@ import React, { FC } from 'react';
 import {StyleSheet, View, Text, Switch, TextInput} from 'react-native';
 import { THEME } from './../theme';
 import { useAppContext } from './../context/context';
+import { sendNotification } from '../services/notifications.service';
+import { getNearestShop } from './../services/geofence.service';
 
 const SettingsScreen: FC = () => {
 
-  const {state, changeTheme, setRadius} = useAppContext();  
+  const {state, coords, changeTheme, setRadius} = useAppContext();  
   return (
     <View style={state.isLightenMode ?  styles.containerLight : styles.containerDark}> 
       <Text style={styles.text}>Theme mode</Text>   
@@ -29,7 +31,13 @@ const SettingsScreen: FC = () => {
           keyboardType='numeric'
           value={state.radius.toString()}
           style={state.isLightenMode ? {...styles.radius, ...styles.radiusLight} : {...styles.radius, ...styles.radiusDark}} 
-          onChangeText={setRadius}
+          onChangeText={async text => {
+            const nearestShop = getNearestShop(state.shops, text, coords);
+            if(nearestShop) {
+                await sendNotification(nearestShop.name, nearestShop.distance.toFixed(2))
+            }          
+            setRadius(text)
+          }}
           maxLength={4}
         />
         <Text style={styles.radiusText}>M</Text>

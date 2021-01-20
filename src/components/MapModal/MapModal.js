@@ -9,8 +9,8 @@ import { selectIcon } from './../../services/mapIconsSelect.service';
 import { getData } from './../../services/asyncStorage.service';
 import {StatusBar} from 'react-native';
 
-import Geofence from 'react-native-expo-geofence';
 import { useAppContext } from './../../context/context';
+import { getNearestShop } from './../../services/geofence.service';
 
 export const MapModal = () => {    
     
@@ -27,25 +27,13 @@ export const MapModal = () => {
     }, [state.shops]);
 
     useEffect(() => {
-     if(state.radius && state.isMapVisible) {
-        const points = state.shops.filter(shop => shop.isFavourite).map(shop => {
-            return {                 
-                title: shop.name,
-                key: shop.id,
-                latitude: parseFloat(shop.latitude),
-                longitude: parseFloat(shop.longitude)                 
-            }
-        });        
-        const result =  Geofence.filterByProximity(coords, points, state.radius ? parseInt(state.radius) / 1000 : 0 );         
-        result.sort((a, b) => a.distanceInKM - b.distanceInKM);           
-         if(result.length) {
-            const nearestShop =  state.shops.find(shop => shop.name === result[0].title);                    
+        if(state.radius && state.isMapVisible) {  
+            const nearestShop = getNearestShop(state.shops, state.radius, coords);
             if(nearestShop) {
-                pushPopupInfo(nearestShop.name, nearestShop.latitude, nearestShop.longitude, nearestShop.isFavourite, nearestShop.id, true, result[0].distanceInKM)
+                pushPopupInfo(nearestShop.name, nearestShop.latitude, nearestShop.longitude, nearestShop.isFavourite, nearestShop.id, true, nearestShop.distance)
                 setIsPopupShow(true);            
             }            
         }
-     }
     }, [state.isMapVisible]);  
 
    const pushPopupInfo = (name, lat, long, isF, id, isClosest, distance) => {         
