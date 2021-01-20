@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {StyleSheet, View, Modal, Text, Image,  TouchableOpacity, TextInput } from 'react-native';
 import MapView from 'react-native-maps';
 import { AntDesign } from '@expo/vector-icons'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Context } from '../../context/context';
 import { THEME } from '../../theme';
 import { nightStyles } from './MapStyles_Night';
 import { selectIcon } from './../../services/mapIconsSelect.service';
@@ -11,10 +10,11 @@ import { getData } from './../../services/asyncStorage.service';
 import {StatusBar} from 'react-native';
 
 import Geofence from 'react-native-expo-geofence';
+import { useAppContext } from './../../context/context';
 
 export const MapModal = () => {    
     
-    const { state, coords, setMapModal, setShops } = useContext(Context); 
+    const { state, coords, setMapModal, setShops } = useAppContext(); 
 
     const [localShops, setLocalShops] = useState(state.shops);
     const [favouriteMode, setFavouriteMode] = useState(false);

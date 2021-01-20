@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useContext, useCallback } from 'react';
+import React, { FC, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { THEME } from '../theme';
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 import { locale } from './../services/location.service';
 import { getLocationName } from './../services/getLocationName.service';
 import { AppButton } from '../components/AppButton';
@@ -14,7 +14,7 @@ const imageBlack = require('../../assets/black-bg.png');
 const HomeScreen : FC = () => { 
 
   const navigation = useNavigation();
-  const {state, setLocation} = useContext(Context);
+  const {state, setLocation} = useAppContext();
 
   const getLocation = useCallback(async () => {
     const data = await locale();

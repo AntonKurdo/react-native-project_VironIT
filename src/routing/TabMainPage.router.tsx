@@ -1,9 +1,9 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { THEME } from './../theme';
 
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 
 // SCREENS
 import SettingsScreen from './../screens/Settings.Screen';
@@ -19,7 +19,7 @@ const Tab = createBottomTabNavigator();
 
 
 export function MainTabs(){
-  const {state} = useContext(Context)
+  const {state} = useAppContext()
 
   return (
     <Tab.Navigator tabBarOptions={

@@ -1,7 +1,7 @@
-import React, {FC, useContext, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {StyleSheet, Text,  View, TextInput} from 'react-native';
 import { THEME } from './../theme';
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 import {Picker} from '@react-native-picker/picker';
 import { AppButton } from '../components/AppButton';
 import { saveShops } from '../services/shopAsyncStorage.service';
@@ -18,7 +18,7 @@ export interface iNewShop {
 };
 
 const CreateShopForm: FC = () => {
-  const {state, setShops} = useContext(Context);
+  const {state, setShops} = useAppContext();
   const navigation = useNavigation();
   const [name, setName] = useState<string>(null);
   const [shopType, setShopType] = useState<string | number>('sport');

@@ -1,10 +1,10 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import {StyleSheet, View, ActivityIndicator} from 'react-native';
 import { THEME } from './../theme';
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 
 export const AppLoader: FC = () => {
-  const {state} = useContext(Context);
+  const {state} = useAppContext();
   
   return (
     <View style={styles.container}>   

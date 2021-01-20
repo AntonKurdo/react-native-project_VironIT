@@ -1,15 +1,15 @@
-import React, { FC, useState, useContext } from 'react';
-import {StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
+import React, { FC, useState } from 'react';
+import {StyleSheet, Text, View, TextInput } from 'react-native';
 import { THEME } from '../theme';
-import { Context } from '../context/context';
 import { useNavigation } from '@react-navigation/native';
 import { storeData } from '../services/asyncStorage.service';
 import { AppButton } from '../components/AppButton';
+import { useAppContext } from './../context/context';
 
 
 const SignUpScreen : FC = () => {
 
-  const {state} = useContext(Context);   
+  const {state} = useAppContext();   
 
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');

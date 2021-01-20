@@ -1,14 +1,14 @@
-import React, {FC, useState, useEffect, useContext} from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {StyleSheet, View,  Text, TextInput} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 import { ShopsListItem } from './../components/ShopsListItem';
 import { THEME } from './../theme';
 import { EvilIcons } from '@expo/vector-icons';
 
 
 const ShopsList: FC = () => {
-  const {state} = useContext(Context);
+  const {state} = useAppContext();
   const [searchValue, setSearchValue] = useState('');
   const [shops, setShops] = useState(state.shops);
 

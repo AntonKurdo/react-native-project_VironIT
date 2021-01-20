@@ -1,11 +1,11 @@
-import React, {FC, useContext, useState} from 'react';
+import React, { FC } from 'react';
 import {StyleSheet, View, Text, Switch, TextInput} from 'react-native';
 import { THEME } from './../theme';
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 
 const SettingsScreen: FC = () => {
 
-  const {state, changeTheme, setRadius} = useContext(Context);  
+  const {state, changeTheme, setRadius} = useAppContext();  
   return (
     <View style={state.isLightenMode ?  styles.containerLight : styles.containerDark}> 
       <Text style={styles.text}>Theme mode</Text>   

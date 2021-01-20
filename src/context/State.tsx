@@ -1,5 +1,5 @@
 import React, {useReducer} from 'react';
-import {Context} from './context';
+import Context from './context';
 import {reducer} from './reducer';
 import { CHANGE_THEME, SET_LOCATION, SET_MAP_MODAL, SHOW_LOADER, HIDE_LOADER, SET_ACTIVE_USER, CLEAR_ACTIVE_USER, SET_SHOPS, CLEAR_SHOPS, SET_RADIUS } from './types';
 

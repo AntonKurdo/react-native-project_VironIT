@@ -1,10 +1,10 @@
-import React, {FC, useState, useContext} from 'react';
+import React, { FC, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Alert } from 'react-native';
 
 import { THEME } from '../theme';
 import { getData } from './../services/asyncStorage.service';
 import { useNavigation } from '@react-navigation/native';
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 import { AppButton } from '../components/AppButton';
 import { AppLoader } from '../components/AppLoader';
 
@@ -13,7 +13,7 @@ const LoginScreen: FC = () => {
   const [password, setPassword] = useState<string>('');
 
   const navigation = useNavigation();
-  const {state, showLoader, hideLoader, setActiveUser, setShops} = useContext(Context);
+  const {state, showLoader, hideLoader, setActiveUser, setShops} = useAppContext();
 
   const onLogin: () => Promise<void> = async () => {
     showLoader();

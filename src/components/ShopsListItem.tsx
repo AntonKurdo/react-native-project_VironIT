@@ -1,9 +1,9 @@
-import React, {FC, useContext} from 'react';
+import React, {FC} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text, Alert} from 'react-native';
 // import { iNewShop } from '../screens/CreateShopForm.screen';
 import { THEME } from './../theme';
 import { AntDesign } from '@expo/vector-icons';
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 import { getData } from './../services/asyncStorage.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -15,7 +15,7 @@ interface ShopsListItemProps {
 
 export const ShopsListItem: FC<ShopsListItemProps> = ({item}) => {
 
-  const {state, setShops} = useContext(Context); 
+  const {state, setShops} = useAppContext(); 
 
   const likeShop = async (id) => {
     try{

@@ -1,8 +1,8 @@
-import React, {FC, useContext} from 'react';
+import React, {FC} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { THEME } from './../theme';
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 
 
 interface StylesType {
@@ -21,7 +21,7 @@ type AppButtonProps = {
 };
 
 export const AppButton : FC <AppButtonProps> = ({onPress, children, iconName, iconSize = 24,  style = {}, variant = 'V1'}) => {
-    const {state} = useContext(Context);
+    const {state} = useAppContext();
 
     return (
       <TouchableOpacity style={variant === 'V1' ? state.isLightenMode ? {...styles.button, ...styles.buttonLightV1, ...style} : {...styles.button, ...styles.buttonDarkV1, ...style} : state.isLightenMode ? {...styles.button, ...styles.buttonLightV2, ...style} : {...styles.button, ...styles.buttonDarkV2, ...style}} onPress={onPress}>              

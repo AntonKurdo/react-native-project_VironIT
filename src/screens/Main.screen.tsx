@@ -1,14 +1,14 @@
-import React, {FC, useEffect, useContext} from 'react';
+import React, { FC, useEffect } from 'react';
 import {StyleSheet, View} from 'react-native';
 import { AppButton } from '../components/AppButton';
-import { Context } from './../context/context';
+import { useAppContext } from './../context/context';
 import { THEME } from './../theme';
 import { useNavigation } from '@react-navigation/native';
 import { MapModal } from '../components/MapModal/MapModal';
 
 const MainScreen: FC = () => {
 
-  const {state, setMapModal, clearActiveUser, clearShops, hideLoader} = useContext(Context);
+  const {state, setMapModal, clearActiveUser, clearShops, hideLoader} = useAppContext();
   const navigation = useNavigation();
 
   useEffect(() =>  {
