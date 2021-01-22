@@ -1,6 +1,6 @@
 import { ImageURISource } from "react-native";
 
-export const selectIcon = (shopType: string): ImageURISource => {
+export const selectIcon = (shopType: string): ImageURISource | number => {
   switch(shopType) {
     case 'sport': 
      return require('../../assets/mapIcons/sport.png');
@@ -13,6 +13,6 @@ export const selectIcon = (shopType: string): ImageURISource => {
     case 'antique': 
      return require('../../assets/mapIcons/antique.png');
     default :
-     return require('');
+     return 0;
   }
 };

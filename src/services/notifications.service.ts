@@ -21,7 +21,7 @@ Notifications.setNotificationHandler({
   })
 });
 
-export const sendNotification = async (shopName: string, distance: number): Promise<void> => {
+export const sendNotification = async (shopName: string, distance: string): Promise<void> => {
   Notifications.scheduleNotificationAsync({
     content: {
       title: `${shopName} is near. Distance - ${distance} km`,

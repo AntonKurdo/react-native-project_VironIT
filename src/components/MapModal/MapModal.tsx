@@ -102,8 +102,8 @@ export const MapModal: FC = () => {
                     style={styles.map}
                     initialRegion={{
                         ...coords,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421
                     }}               
                 >
                     <Marker                        
@@ -114,8 +114,8 @@ export const MapModal: FC = () => {
                   {
                       state.radius > 0 && (
                         <Circle                            
-                            center = {coords }
-                            radius = { state.radius ? parseInt(state.radius) : 0 }
+                            center = { coords }
+                            radius = { state.radius ? state.radius : 0 }
                             strokeWidth = { 1 }
                             strokeColor = { state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.SECOND_COLOR_DARK }
                             fillColor = { 'rgba(230,238,255,0.5)' }                           

@@ -1,7 +1,7 @@
 import Geofence from 'react-native-expo-geofence';
 import { iNewShop } from './../screens/CreateShopForm.screen';
 
-export const getNearestShop = (shops: Array<iNewShop>, radius: string, coords: object) => {
+export const getNearestShop = (shops: Array<iNewShop>, radius: number, coords: object) => {
     const points = shops
         .filter(shop => shop.isFavourite)
         .map(shop => {
@@ -16,7 +16,7 @@ export const getNearestShop = (shops: Array<iNewShop>, radius: string, coords: o
         coords, 
         points, 
         radius
-            ? parseInt(radius) / 1000
+            ? radius / 1000
             : 0
         );
     result.sort((a, b) => a.distanceInKM - b.distanceInKM);

@@ -32,11 +32,11 @@ const SettingsScreen: FC = () => {
           value={state.radius.toString()}
           style={state.isLightenMode ? {...styles.radius, ...styles.radiusLight} : {...styles.radius, ...styles.radiusDark}} 
           onChangeText={async text => {
-            const nearestShop = getNearestShop(state.shops, text, coords);
+            const nearestShop = getNearestShop(state.shops, parseInt(text), coords);
             if(nearestShop) {
                 await sendNotification(nearestShop.name, nearestShop.distance.toFixed(2))
             }          
-            setRadius(text)
+            setRadius(text ? parseInt(text) : 0)
           }}
           maxLength={4}
         />

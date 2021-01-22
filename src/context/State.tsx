@@ -5,7 +5,7 @@ import { CHANGE_THEME, SET_LOCATION, SET_MAP_MODAL, SHOW_LOADER, HIDE_LOADER, SE
 
 export const AppState = ({children}) => {
 
-    const INITIAL_STATE = {   
+  const INITIAL_STATE = {   
         activeUser: '',
         isLightenMode: true,
         location: null,
@@ -16,7 +16,7 @@ export const AppState = ({children}) => {
         isMapVisible: false,
         isLoader: false,
         shops: [],       
-        radius: '0'
+        radius: 0
     };
 
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE);

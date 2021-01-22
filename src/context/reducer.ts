@@ -1,28 +1,18 @@
+import { LatLng } from 'react-native-maps';
 import { CHANGE_THEME, SET_LOCATION, SET_MAP_MODAL, SHOW_LOADER, HIDE_LOADER, SET_ACTIVE_USER, CLEAR_ACTIVE_USER, SET_SHOPS, CLEAR_SHOPS, SET_RADIUS } from './types';
-
-interface iCoords {
-  latitude: number | null, 
-  longitude: number | null
-}
 
 interface iAction {
   type: string, 
   location?: string,
-  coords?: iCoords,
+  coords?: LatLng,
   userName?: string,
   shops?: object[],
   radius?: number
 };
 
-interface iState {  
-  isLightenMode: boolean,
-  location: null | string,
-  coords: iCoords
-};
-
 const handlers = {
-  [CHANGE_THEME]: (state: iState) => ({...state, isLightenMode: !state.isLightenMode}),
-  [SET_LOCATION]: (state: iState, {location, coords}: iAction) => ({...state, location, coords}),
+  [CHANGE_THEME]: (state) => ({...state, isLightenMode: !state.isLightenMode}),
+  [SET_LOCATION]: (state, {location, coords}: iAction) => ({...state, location, coords}),
   [SET_MAP_MODAL]: state => ({...state, isMapVisible: !state.isMapVisible}),
   [SHOW_LOADER]: state => ({...state, isLoader: true}),
   [HIDE_LOADER]: state => ({...state, isLoader: false}),
@@ -34,6 +24,6 @@ const handlers = {
 };
 
 
-export const reducer = (state: iState, action: iAction): any => { 
+export const reducer = (state, action: iAction): any => { 
   return handlers[action.type](state, action);
 };
