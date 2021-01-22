@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {StyleSheet, View, Modal, Text, Image,  TouchableOpacity, TextInput } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, {Marker, Circle} from 'react-native-maps';
 import { AntDesign } from '@expo/vector-icons'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { THEME } from '../../theme';
 import { nightStyles } from './MapStyles_Night';
-import { selectIcon } from './../../services/mapIconsSelect.service';
-import { getData } from './../../services/asyncStorage.service';
+import { selectIcon } from '../../services/mapIconsSelect.service';
+import { getData } from '../../services/asyncStorage.service';
 import {StatusBar} from 'react-native';
 
-import { useAppContext } from './../../context/context';
-import { getNearestShop } from './../../services/geofence.service';
+import { useAppContext } from '../../context/context';
+import { getNearestShop } from '../../services/geofence.service';
 
-export const MapModal = () => {    
+export const MapModal: FC = () => {    
     
     const { state, coords, setMapModal, setShops } = useAppContext(); 
 
@@ -36,7 +36,7 @@ export const MapModal = () => {
         }
     }, [state.isMapVisible]);  
 
-   const pushPopupInfo = (name, lat, long, isF, id, isClosest, distance) => {         
+   const pushPopupInfo = (name: string, lat: string, long: string, isF: boolean, id: string, isClosest: boolean, distance: number) => {         
         setIsPopupShow(true);
         setPopupInfo({
             name,
@@ -106,20 +106,19 @@ export const MapModal = () => {
                     longitudeDelta: 0.0421
                     }}               
                 >
-                    <MapView.Marker                        
+                    <Marker                        
                         coordinate={coords}
                         title='Now You are here!'                                              
                     />  
 
                   {
                       state.radius > 0 && (
-                        <MapView.Circle                            
+                        <Circle                            
                             center = {coords }
                             radius = { state.radius ? parseInt(state.radius) : 0 }
                             strokeWidth = { 1 }
                             strokeColor = { state.isLightenMode ? THEME.MAIN_COLOR_LIGHT : THEME.SECOND_COLOR_DARK }
-                            fillColor = { 'rgba(230,238,255,0.5)' }
-                            onRegionChangeComplete = { () =>  console.log('hohoho') }
+                            fillColor = { 'rgba(230,238,255,0.5)' }                           
                     />
                       )
                   }
@@ -127,7 +126,7 @@ export const MapModal = () => {
                     {
                      localShops.map((shop, index) => {
                         return (
-                          <MapView.Marker
+                          <Marker
                             onPress={() => pushPopupInfo(shop.name, shop.latitude, shop.longitude, shop.isFavourite, shop.id, false, null)}
                             icon={selectIcon(shop.shopType)}
                             key={index}

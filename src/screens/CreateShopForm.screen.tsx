@@ -14,7 +14,8 @@ export interface iNewShop {
   shopType: string,
   latitude: string,
   longitude: string,
-  isFavourite: boolean
+  isFavourite: boolean,
+  distance?: number
 };
 
 const CreateShopForm: FC = () => {
